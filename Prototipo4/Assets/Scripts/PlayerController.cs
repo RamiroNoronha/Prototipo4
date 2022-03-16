@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private GameObject focalPoint;
     public bool hasPowerup = false;
     private float powerUpStrength = 15.0f;
+    public GameObject powerupIndicator;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour
     {
         float fowardInput = Input.GetAxis("Vertical");
         playerRB.AddForce(focalPoint.transform.forward * speed * fowardInput);
+        powerupIndicator.transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -28,8 +30,17 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Powerup"))
         {
             hasPowerup = true;
+            powerupIndicator.gameObject.SetActive(true);
             Destroy(other.gameObject);
+            StartCoroutine(PowerupCountDownRoutine()); 
         }
+    }
+
+    IEnumerator PowerupCountDownRoutine()
+    {
+        yield return new WaitForSeconds(7);  // Perguntar sobre o yield para o walter
+        hasPowerup = false;
+        powerupIndicator.gameObject.SetActive(false);
     }
 
     private void OnCollisionEnter(Collision collision)
