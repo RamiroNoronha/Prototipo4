@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public bool hasPowerup = false;
     private float powerUpStrength = 15.0f;
     public GameObject powerupIndicator;
+    public bool gameOver = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +24,11 @@ public class PlayerController : MonoBehaviour
         float fowardInput = Input.GetAxis("Vertical");
         playerRB.AddForce(focalPoint.transform.forward * speed * fowardInput);
         powerupIndicator.transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
+        
+        if(transform.position.y < -10)
+        {
+            gameOver = true;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
